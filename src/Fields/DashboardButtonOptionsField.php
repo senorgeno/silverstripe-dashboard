@@ -1,5 +1,9 @@
 <?php
 
+namespace SilverStripeDashboard\Fields;
+
+use OptionsetField;
+use Requirements;
 
 class DashboardButtonOptionsField extends OptionsetField {
 

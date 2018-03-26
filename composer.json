@@ -1,7 +1,7 @@
 {
     "name": "unclecheese/dashboard",
     "description": "Adds a dashboard to the SilverStripe CMS",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "keywords": ["silverstripe", "dashboard", "module", "cms"],
 	"license": "BSD-3-Clause",
     "authors": [
@@ -12,12 +12,18 @@
     ],
     "require":
     {
-        "silverstripe/framework": "~3.1"
+        "silverstripe/framework": "^4"
     },
-    "replace": {"silverstripe/dashboard": "*"},
-
+    "replace": {
+        "silverstripe/dashboard": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SilverStripeDashboard\\": "src/"
+        }
+    },
     "extra": {
-	"installer-name": "dashboard"
+	    "installer-name": "dashboard"
     }
     
 }

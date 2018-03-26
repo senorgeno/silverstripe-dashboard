@@ -1,5 +1,13 @@
 <?php
 
+namespace SilverStripeDashboard\Extensions;
+
+use DataExtension;
+use FieldList;
+use SiteConfig;
+use DB;
+use SilverStripeDashboard\Models\DashboardPanel;
+
 
 /**
  * Decorates the Member object to work with the Dashboard interface
@@ -18,7 +26,7 @@ class DashboardMember extends DataExtension {
 
 
 	private static $has_many = array (
-		'DashboardPanels' => 'DashboardPanel'
+		'DashboardPanels' => DashboardPanel::class
 	);
 
 

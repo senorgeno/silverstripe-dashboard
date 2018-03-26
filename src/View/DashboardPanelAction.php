@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverStripeDashboard\View;
+
+use ViewableData;
+
+
 
 /**
  * Defines the object that renders as a button in a dashboard panel

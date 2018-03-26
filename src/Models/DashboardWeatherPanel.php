@@ -1,5 +1,14 @@
 <?php
 
+namespace SilverStripeDashboard\Models;
+
+use TextField;
+use OptionsetField;
+use DropdownField;
+use Convert;
+use ArrayList;
+use ArrayData;
+use Requirements;
 
 class DashboardWeatherPanel extends DashboardPanel {
 

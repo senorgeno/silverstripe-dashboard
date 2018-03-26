@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverStripeDashboard\View;
+
+use ViewableData;
+use ArrayList;
+use ArrayData;
+use Requirements;
+
 
 /**
  * An API for creating a Google chart in a dashboard panel
@@ -164,7 +171,7 @@ class DashboardChart extends ViewableData {
 	public function forTemplate() {
 		Requirements::javascript("dashboard/javascript/thirdparty/google_jsapi_visualization.js");
 		Requirements::javascript("dashboard/javascript/dashboard-chart.js");
-		return $this->renderWith('DashboardChart');
+		return $this->renderWith(DashboardChart::class);
 	}
 
 

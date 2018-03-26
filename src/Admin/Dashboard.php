@@ -1,5 +1,26 @@
 <?php
 
+namespace SilverStripeDashboard\Admin;
+
+use LeftAndMain;
+use PermissionProvider;
+use Requirements;
+use SS_HTTPRequest;
+use Member;
+use Object;
+use DataModel;
+use SiteConfig;
+use SS_HTTPResponse;
+use Permission;
+use ArrayList;
+use SS_ClassLoader;
+use Injector;
+use Config;
+use RequestHandler;
+use Form;
+use FieldList;
+use FormAction;
+use SilverStripeDashboard\Models\DashboardPanel;
 
 /** 
  * Defines the Dashboard interface for the CMS
@@ -11,7 +32,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 
 	
 
-	private static $menu_title = "Dashboard";
+	private static $menu_title = Dashboard::class;
 
 
 	
@@ -31,7 +52,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 	
 	
 	
-	private static $tree_class = 'DashboardPanel';
+	private static $tree_class = DashboardPanel::class;
 
 
 	
@@ -63,7 +84,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 	 * @return array
 	 */
 	public function providePermissions() {
-		$title = _t("Dashboard.MENUTITLE", LeftAndMain::menu_title_for_class('Dashboard'));
+		$title = _t("Dashboard.MENUTITLE", LeftAndMain::menu_title_for_class(Dashboard::class));
 		return array(
 			"CMS_ACCESS_Dashboard" => array(
 				'name' => _t('Dashboard.ACCESS', "Access to '{title}' section", array('title' => $title)),
@@ -112,7 +133,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 	public function handlePanel(SS_HTTPRequest $r) {
 		if($r->param('ID') == "new") {
 			$class = $r->getVar('type');
-			if($class && class_exists($class) && is_subclass_of($class, "DashboardPanel")) {
+			if($class && class_exists($class) && is_subclass_of($class, DashboardPanel::class)) {
 				$panel = new $class();
 				if($panel->canCreate()) {
 					$panel->MemberID = Member::currentUserID();
@@ -236,7 +257,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 	 */
 	public function AllPanels() {
 		$set = ArrayList::create(array());
-		$panels = SS_ClassLoader::instance()->getManifest()->getDescendantsOf("DashboardPanel");
+		$panels = SS_ClassLoader::instance()->getManifest()->getDescendantsOf(DashboardPanel::class);
 		if($this->config()->excluded_panels) {
 			$panels = array_diff($panels,$this->config()->excluded_panels);
 		}

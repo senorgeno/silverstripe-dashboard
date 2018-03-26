@@ -1,0 +1,18 @@
+mappings:
+  Dashboard: SilverStripeDashboard\Admin\Dashboard
+  Dashboard_PanelRequest: SilverStripeDashboard\Admin\Dashboard_PanelRequest
+  DashboardMember: SilverStripeDashboard\Extensions\DashboardMember
+  DashboardItemEditForm: SilverStripeDashboard\Extensions\DashboardItemEditForm
+  DashboardHasManyRelationEditorItemRequest: SilverStripeDashboard\Control\DashboardHasManyRelationEditorItemRequest
+  DashboardHasManyRelationEditor: SilverStripeDashboard\Fields\DashboardHasManyRelationEditor
+  DashboardButtonOptionsField: SilverStripeDashboard\Fields\DashboardButtonOptionsField
+  DashboardPanelDataObject: SilverStripeDashboard\Models\DashboardPanelDataObject
+  DashboardPanel: SilverStripeDashboard\Models\DashboardPanel
+  DashboardModelAdminPanel: SilverStripeDashboard\Models\DashboardModelAdminPanel
+  DashboardModelAdmin_PanelRequest: SilverStripeDashboard\Models\DashboardModelAdmin_PanelRequest
+  DashboardWeatherPanel: SilverStripeDashboard\Models\DashboardWeatherPanel
+  gapi: SilverStripeDashboard\ThirdParty\gapi
+  gapiAccountEntry: SilverStripeDashboard\ThirdParty\gapiAccountEntry
+  gapiReportEntry: SilverStripeDashboard\ThirdParty\gapiReportEntry
+  DashboardChart: SilverStripeDashboard\View\DashboardChart
+  DashboardPanelAction: SilverStripeDashboard\View\DashboardPanelAction

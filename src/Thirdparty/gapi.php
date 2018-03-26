@@ -1,4 +1,9 @@
 <?php
+
+namespace SilverStripeDashboard\ThirdParty;
+
+use Exception;
+
 /**
  * GAPI - Google Analytics PHP Interface
  * 

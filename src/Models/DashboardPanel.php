@@ -1,5 +1,20 @@
 <?php
 
+namespace SilverStripeDashboard\Models;
+
+use DataObject;
+use Injector;
+use Config;
+use Controller;
+use FieldList;
+use TextField;
+use ArrayList;
+use Member;
+use Permission;
+use SilverStripeDashboard\Admin\Dashboard_PanelRequest;
+use SilverStripeDashboard\Admin\Dashboard;
+use SilverStripeDashboard\Fields\DashboardButtonOptionsField;
+
 /**
  * Defines the DashboardPanel dataobject. All dashboard panels must descend from this class.
  *
@@ -70,7 +85,7 @@ class DashboardPanel extends DataObject {
 	/**
 	 * @var string the name of the template used for the wrapper of this panel
 	 */
-	protected $holderTemplate = "DashboardPanel";
+	protected $holderTemplate = DashboardPanel::class;
 
 
 
@@ -79,7 +94,7 @@ class DashboardPanel extends DataObject {
 	 * @var string The name of the request handler class that the Dashbaord controller
 	 * will use to communicate with a given panel
 	 */
-	protected $requestHandlerClass = "Dashboard_PanelRequest";
+	protected $requestHandlerClass = Dashboard_PanelRequest::class;
 
 
 	/**
@@ -157,7 +172,7 @@ class DashboardPanel extends DataObject {
 	 * @return Dashboard
 	 */
 	public function getDashboard() {
-		return Injector::inst()->get("Dashboard");
+		return Injector::inst()->get(Dashboard::class);
 	}
 
 

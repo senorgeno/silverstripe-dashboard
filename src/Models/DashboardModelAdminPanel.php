@@ -1,5 +1,23 @@
 <?php
 
+namespace SilverStripeDashboard\Models;
+
+use SS_TemplateLoader;
+use SS_ClassLoader;
+use Injector;
+use TestOnly;
+use Config;
+use TextField;
+use DropdownField;
+use Controller;
+use Versioned;
+use DataList;
+use ArrayList;
+use Requirements;
+use SS_HTTPRequest;
+use Convert;
+use SilverStripeDashboard\View\DashboardPanelAction;
+use SilverStripeDashboard\Admin\Dashboard_PanelRequest;
 
 /**
  * Defines a {@link DashboardPanel} object that shows a summary of a ModelAdmin interface.
@@ -34,7 +52,7 @@ class DashboardModelAdminPanel extends DashboardPanel {
 	/**
 	 * @var string Overrides the standard request handler to provide custom controller actions
 	 */
-	protected $requestHandlerClass = "DashboardModelAdmin_PanelRequest";
+	protected $requestHandlerClass = DashboardModelAdmin_PanelRequest::class;
 
 
 

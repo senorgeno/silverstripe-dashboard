@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverStripeDashboard\Models;
+
+use DataObject;
+use FieldList;
+use Form;
+use Injector;
+use SilverStripeDashboard\Admin\Dashboard;
 
 
 /** 
@@ -20,7 +27,7 @@ class DashboardPanelDataObject extends DataObject {
 
 
 	private static $has_one = array (
-		'DashboardPanel' => 'DashboardPanel'
+		'DashboardPanel' => DashboardPanel::class
 	);
 
 
@@ -50,7 +57,7 @@ class DashboardPanelDataObject extends DataObject {
 	 * @return Form
 	 */
 	public function getConfigFields() {
-		$form = Form::create(Injector::inst()->get("Dashboard"), "Form", $this->getConfiguration());
+		$form = Form::create(Injector::inst()->get(Dashboard::class), "Form", $this->getConfiguration());
 	}
 
 

@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverStripeDashboard\Extensions;
+
+use Extension;
+use Injector;
+use HiddenField;
 
 class DashboardItemEditForm extends Extension
 {
