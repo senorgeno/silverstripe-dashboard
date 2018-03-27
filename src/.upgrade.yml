@@ -9,7 +9,7 @@ mappings:
   DashboardPanelDataObject: SilverStripeDashboard\Models\DashboardPanelDataObject
   DashboardPanel: SilverStripeDashboard\Models\DashboardPanel
   DashboardModelAdminPanel: SilverStripeDashboard\Models\DashboardModelAdminPanel
-  DashboardModelAdmin_PanelRequest: SilverStripeDashboard\Models\DashboardModelAdmin_PanelRequest
+  DashboardModelAdminPanelRequest: SilverStripeDashboard\Control\DashboardModelAdminPanelRequest
   DashboardWeatherPanel: SilverStripeDashboard\Models\DashboardWeatherPanel
   gapi: SilverStripeDashboard\ThirdParty\gapi
   gapiAccountEntry: SilverStripeDashboard\ThirdParty\gapiAccountEntry

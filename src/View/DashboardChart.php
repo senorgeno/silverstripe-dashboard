@@ -69,8 +69,12 @@ class DashboardChart extends ViewableData
      * @param array The chart data, in x/y pairs
      * @return DashboardChart
      */
-    public static function create($title = null, $x_label = null, $y_label = null, $chartData = array())
+    public static function create(...$args)
     {
+        $title = isset($args[0]) ? $args[0] : null;
+        $x_label = isset($args[1]) ? $args[1] : null;
+        $y_label = isset($args[2]) ? $args[2] : null;
+        $chartData = isset($args[3]) ? $args[3] : [];
         self::$instances++;
 
         return new DashboardChart($title, $x_label, $y_label, $chartData);
@@ -112,7 +116,7 @@ class DashboardChart extends ViewableData
     /**
      * Gets a list of x/y pairs for the template
      *
-     * @return ArrayList
+     * @return ArrayData
      */
     public function getChartData()
     {

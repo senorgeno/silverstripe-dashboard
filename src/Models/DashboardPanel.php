@@ -12,7 +12,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\SiteConfig\SiteConfig;
-use SilverStripeDashboard\Admin\Dashboard_PanelRequest;
+use SilverStripeDashboard\Control\DashboardPanelRequest;
 use SilverStripeDashboard\Admin\Dashboard;
 use SilverStripeDashboard\Fields\DashboardButtonOptionsField;
 
@@ -93,7 +93,7 @@ class DashboardPanel extends DataObject
      * @var string The name of the request handler class that the Dashbaord controller
      * will use to communicate with a given panel
      */
-    protected $requestHandlerClass = Dashboard_PanelRequest::class;
+    protected $requestHandlerClass = DashboardPanelRequest::class;
 
 
     /**
@@ -321,7 +321,7 @@ class DashboardPanel extends DataObject
      */
     public function Form()
     {
-        return Dashboard_PanelRequest::create($this->getDashboard(), $this)->ConfigureForm();
+        return DashboardPanelRequest::create($this->getDashboard(), $this)->ConfigureForm();
     }
 
 
