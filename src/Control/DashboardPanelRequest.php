@@ -74,9 +74,10 @@ class DashboardPanelRequest extends RequestHandler
      * Gets the link to this request. Useful for rendering the nested Form. Also provides an easy
      * "refresh" link to the panel that is managed by this request
      *
+     * @param null $action
      * @return string
      */
-    public function Link()
+    public function Link($action = null)
     {
         return $this->dashboard->Link("panel/{$this->panel->ID}");
     }
@@ -86,7 +87,7 @@ class DashboardPanelRequest extends RequestHandler
      * Renders the panel in this request
      *
      * @param HTTPRequest $r
-     * @return SSViewer
+     * @return \SilverStripeDashboard\Models\SSViewer
      * @throws \SilverStripe\Control\HTTPResponse_Exception
      */
     public function panel(HTTPRequest $r)
