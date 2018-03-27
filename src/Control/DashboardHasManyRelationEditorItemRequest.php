@@ -2,15 +2,15 @@
 
 namespace SilverStripeDashboard\Control;
 
-use RequestHandler;
-use SS_HTTPRequest;
-use SS_HTTPResponse;
-use Controller;
-use Form;
-use Injector;
-use FieldList;
-use FormAction;
-use DataList;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\RequestHandler;
+use \SilverStripe\Control\HTTPResponse;
+use SilverStripe\Control\Controller;
+use SilverStripe\Forms\Form;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\ORM\DataList;
 
 /**
  * Defines the {@link RequestHandler} object that handles an item belonging to the editor
@@ -18,7 +18,8 @@ use DataList;
  * @package Dashboard
  * @author Uncle Cheese <unclecheese@leftandmain.com>
  */
-class DashboardHasManyRelationEditorItemRequest extends RequestHandler {
+class DashboardHasManyRelationEditorItemRequest extends RequestHandler
+{
 
     private static $allowed_actions = array(
         "edit",
@@ -33,12 +34,10 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler {
     protected $dashboard;
 
 
-
     /**
      * @var DashboardPanel The dashboard panel that owns the editor that is running the request
      */
     protected $panel;
-
 
 
     /**
@@ -47,24 +46,20 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler {
     protected $editor;
 
 
-
     /**
      * @var DashboardPanelDataObject The object that was requested for edit/create/delete
      */
     protected $item;
 
 
-
-
-    private static $url_handlers = array (
+    private static $url_handlers = array(
         '$Action!' => '$Action',
-        '' => 'edit'
+        ''         => 'edit'
     );
 
 
-
-
-    public function __construct($dashboard, $panel, $editor, $item) {
+    public function __construct($dashboard, $panel, $editor, $item)
+    {
         $this->dashboard = $dashboard;
         $this->panel = $panel;
         $this->editor = $editor;
@@ -73,33 +68,30 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler {
     }
 
 
-
-
     /**
      * An action that handles the edit of an object managed by the editor
      *
-     * @param SS_HTTPRequest
-     * @return SSViewer
+     * @param \SilverStripeDashboard\Control\HTTPRequest $r
+     * @return \SilverStripe\ORM\FieldType\DBHTMLText
      */
-    public function edit(SS_HTTPRequest $r) {
+    public function edit(HTTPRequest $r)
+    {
         return $this->renderWith('DashboardHasManyRelationEditorDetailForm');
     }
-
-
 
 
     /**
      * An action that handles the deletion of an object managed by the editor
      *
-     * @param SS_HTTPRequest
-     * @return SSViewer
+     * @param \SilverStripeDashboard\Control\HTTPRequest $r
+     * @return HTTPResponse
      */
-    public function delete(SS_HTTPRequest $r) {
+    public function delete(HTTPRequest $r)
+    {
         $this->item->delete();
-        return new SS_HTTPResponse("OK");
+
+        return new HTTPResponse("OK");
     }
-
-
 
 
     /**
@@ -107,10 +99,11 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler {
      *
      * @return string
      */
-    public function Link($action = null) {
-        return Controller::join_links($this->editor->Link(),"item",$this->item->ID ? $this->item->ID : "new",$action);
+    public function Link($action = null)
+    {
+        return Controller::join_links($this->editor->Link(), "item", $this->item->ID ? $this->item->ID : "new",
+            $action);
     }
-
 
 
     /**
@@ -118,39 +111,32 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler {
      *
      * @return string
      */
-    public function RefreshLink() {
+    public function RefreshLink()
+    {
         return $this->Link("edit");
     }
-
-
 
 
     /**
      * Provides a form to edit or create an object managed by the editor
      *
      * @return Form
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function DetailForm() {
-        $form = Form::create(
-            $this,
-            "DetailForm",
+    public function DetailForm()
+    {
+        $form = Form::create($this, "DetailForm",
             Injector::inst()->get($this->editor->relationClass)->getConfiguration(),
-            FieldList::create(
-                FormAction::create('saveDetail',_t('Dashboard.SAVE','Save'))
-                          ->setUseButtonTag(true)
-                          ->addExtraClass('ss-ui-action-constructive small'),
-                FormAction::create('cancel',_t('Dashboard.CANCEL','Cancel'))
-                          ->setUseButtonTag(true)
-                          ->addExtraClass('small')
-            )
-        );
-        $form->setHTMLID("Form_DetailForm_".$this->panel->ID."_".$this->item->ID);
+            FieldList::create(FormAction::create('saveDetail', _t('Dashboard.SAVE', 'Save'))->setUseButtonTag(true)
+                                        ->addExtraClass('ss-ui-action-constructive small'),
+                FormAction::create('cancel', _t('Dashboard.CANCEL', 'Cancel'))->setUseButtonTag(true)
+                          ->addExtraClass('small')));
+        $form->setHTMLID("Form_DetailForm_" . $this->panel->ID . "_" . $this->item->ID);
         $form->loadDataFrom($this->item);
         $form->addExtraClass('dashboard-has-many-editor-detail-form-form');
+
         return $form;
     }
-
-
 
 
     /**
@@ -158,18 +144,21 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler {
      *
      * @param array The raw POST data from the form
      * @param Form The DetailForm object
+     * @return HTTPResponse
      */
-    public function saveDetail($data, $form) {
+    public function saveDetail($data, $form)
+    {
         $item = $this->item;
-        if(!$item->exists()) {
+        if (!$item->exists()) {
             $item->DashboardPanelID = $this->panel->ID;
             $sort = DataList::create($item->class)->max("SortOrder");
-            $item->SortOrder = $sort+1;
+            $item->SortOrder = $sort + 1;
             $item->write();
         }
         $form->saveInto($item);
         $item->write();
-        return new SS_HTTPResponse("OK");
+
+        return new HTTPResponse("OK");
     }
 
 

@@ -2,21 +2,22 @@
 
 namespace SilverStripeDashboard\Fields;
 
-use FormField;
-use ArrayList;
-use Config;
-use ArrayData;
-use Controller;
-use SS_HTTPRequest;
-use Object;
-use DataList;
-use DataModel;
-use SS_HTTPResponse;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\FormField;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\View\ArrayData;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\ORM\DataList;
+use SilverStripe\Control\HTTPResponse;
+use SilverStripe\View\SSViewer;
 use SilverStripeDashboard\Models\DashboardPanel;
 use SilverStripeDashboard\Models\DashboardPanelDataObject;
 use SilverStripeDashboard\Control\DashboardHasManyRelationEditorItemRequest;
 
-/** 
+/**
  * A custom FormField object used to manage has_many relations to a DashboardPanel.
  *
  * Note: All has_many relations must be descendants of {@link DashboardPanelDataObject}
@@ -24,187 +25,185 @@ use SilverStripeDashboard\Control\DashboardHasManyRelationEditorItemRequest;
  * @package Dashboard
  * @author Uncle Cheese <unclecheese@leftandmain.com>
  */
-class DashboardHasManyRelationEditor extends FormField {
+class DashboardHasManyRelationEditor extends FormField
+{
 
-	private static $allowed_actions = array(
-		"handleItem"
-	); 
+    private static $allowed_actions = array(
+        "handleItem"
+    );
 
-	private static $url_handlers = array (
-		'item/$ID' => 'handleItem',
-		'$Action!' => '$Action',
-	);
-
-
-
-	/**
-	 * @var DashboardPanel The {@link DashboardPanel} that owns this editor	 
-	 */
-	protected $controller;
+    private static $url_handlers = array(
+        'item/$ID' => 'handleItem',
+        '$Action!' => '$Action',
+    );
 
 
-
-	/** 
-	 * @var string The name of the relationship that is managed by this editor
-	 */
-	protected $relationName;
-
+    /**
+     * @var DashboardPanel The {@link DashboardPanel} that owns this editor
+     */
+    protected $controller;
 
 
-	/**
-	 * @var string The class of the related object
-	 */
-	protected $relationClass;	
+    /**
+     * @var string The name of the relationship that is managed by this editor
+     */
+    protected $relationName;
 
 
-
-	/**
-	 * @var DataList The current list of records in the relation	 
-	 */
-	protected $records;
-
-
-	
-	/**
-	 * @var string The template that renders the editor
-	 */
-	protected $template = DashboardHasManyRelationEditor::class;
+    /**
+     * @var string The class of the related object
+     */
+    protected $relationClass;
 
 
-
-	
-	/**
-	 * The contructor for the editor. Sets member properties and checks for major errors.
-	 *
-	 * @param DashboardPanel The owner of the editor
-	 * @param string The name of the relation managed by the editor
-	 * @param string The class of the related object managed by the editor
-	 * @param string The title (label) of the editor
-	 */
-	public function __construct($controller, $relationName, $relationClass, $title = null) {
-		$this->controller = $controller;
-		$this->relationName = $relationName;
-		$this->relationClass = $relationClass;
-		$this->title = $title;
-
-		if(!$this->controller instanceof DashboardPanel) {
-			user_error("DashboardHasManyRelationEditor must be passed an instance of DashboardPanel", E_USER_ERROR);
-		}
-		if(!$this->controller->has_many($this->relationName)) {
-			user_error("DashboardHasManyRelationEditor must be passed a valid has_many relation for the panel. $relationName is not in the has_many array.", E_USER_ERROR);
-		}
-		if(!is_subclass_of($relationClass, DashboardPanelDataObject::class)) {
-			user_error("DashbordHasManyRelationEditor can only manage subclasses of DashboardPanelDataObject", E_USER_ERROR);
-		}
-
-		$this->records = $this->controller->$relationName();
-
-		parent::__construct($relationName, $title);	
-
-	}
+    /**
+     * @var DataList The current list of records in the relation
+     */
+    protected $records;
 
 
+    /**
+     * @var string The template that renders the editor
+     */
+    protected $template = DashboardHasManyRelationEditor::class;
 
 
-	/**
-	 * Sets the template of the editor
-	 * 
-	 * @param string The name of the template
-	 */
-	public function setTemplate($template) {
-		$this->template = $template;
-	}
+    /**
+     * The contructor for the editor. Sets member properties and checks for major errors.
+     *
+     * @param DashboardPanel The owner of the editor
+     * @param string The name of the relation managed by the editor
+     * @param string The class of the related object managed by the editor
+     * @param string The title (label) of the editor
+     */
+    public function __construct($controller, $relationName, $relationClass, $title = null)
+    {
+        $this->controller = $controller;
+        $this->relationName = $relationName;
+        $this->relationClass = $relationClass;
+        $this->title = $title;
+
+        if (!$this->controller instanceof DashboardPanel) {
+            user_error("DashboardHasManyRelationEditor must be passed an instance of DashboardPanel", E_USER_ERROR);
+        }
+        if (!$this->controller->has_many($this->relationName)) {
+            user_error("DashboardHasManyRelationEditor must be passed a valid has_many relation for the panel. $relationName is not in the has_many array.",
+                E_USER_ERROR);
+        }
+        if (!is_subclass_of($relationClass, DashboardPanelDataObject::class)) {
+            user_error("DashbordHasManyRelationEditor can only manage subclasses of DashboardPanelDataObject",
+                E_USER_ERROR);
+        }
+
+        $this->records = $this->controller->$relationName();
+
+        parent::__construct($relationName, $title);
+
+    }
 
 
-
-	/**
-	 * Gets all of the items in the relation and provides edit/delete links for the table
-	 *
-	 * @return ArrayList
-	 */
-	public function Items() {
-		$items = ArrayList::create(array());
-		$labelField = Config::inst()->get($this->relationClass, "label_field", Config::INHERITED);
-		foreach($this->records as $record) {
-			$items->push(ArrayData::create(array(
-				'Label' => $record->$labelField,
-				'DeleteLink' => Controller::join_links($this->Link("item"),$record->ID,"delete"),
-				'EditLink' => $this->Link("item/{$record->ID}"),
-				'ID' => $record->ID
-			)));
-		}
-		return $items;
-	}
+    /**
+     * Sets the template of the editor
+     *
+     * @param string The name of the template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
 
 
+    /**
+     * Gets all of the items in the relation and provides edit/delete links for the table
+     *
+     * @return ArrayList
+     */
+    public function Items()
+    {
+        $items = ArrayList::create(array());
+        $labelField = Config::inst()->get($this->relationClass, "label_field", Config::INHERITED);
+        foreach ($this->records as $record) {
+            $items->push(ArrayData::create(array(
+                'Label'      => $record->$labelField,
+                'DeleteLink' => Controller::join_links($this->Link("item"), $record->ID, "delete"),
+                'EditLink'   => $this->Link("item/{$record->ID}"),
+                'ID'         => $record->ID
+            )));
+        }
+
+        return $items;
+    }
 
 
-	/**
-	 * Renders the form field
-	 *
-	 * @return SSViewer
-	 */
-	public function FieldHolder($attributes = array ()) {		
-		return $this->renderWith($this->template);
-	}
+    /**
+     * Renders the form field
+     *
+     * @param array $attributes
+     * @return \SilverStripe\ORM\FieldType\DBHTMLText
+     */
+    public function FieldHolder($attributes = array())
+    {
+        return $this->renderWith($this->template);
+    }
 
 
+    /**
+     * Handles a request for a record in the table
+     *
+     * @param HTTPRequest $r
+     * @return HTTPResponse
+     * @throws \SilverStripe\Control\HTTPResponse_Exception
+     */
+    public function handleItem(HTTPRequest $r)
+    {
+        if ($r->param('ID') == "new") {
+            $item = Injector::inst()->create($this->relationClass);
+        } else {
+            $item = DataList::create($this->relationClass)->byID((int)$r->param('ID'));
+        }
+        if ($item) {
+            $handler = DashboardHasManyRelationEditorItemRequest::create($this->controller->getDashboard(),
+                $this->controller, $this, $item);
+
+            return $handler->handleRequest($r);
+        }
+
+        return $this->httpError(404);
+    }
 
 
-	/**
-	 * Handles a request for a record in the table
-	 *
-	 * @param SS_HTTPRequest
-	 * @return SS_HTTPResponse
-	 */
-	public function handleItem(SS_HTTPRequest $r) {
-		if($r->param('ID') == "new") {
-			$item = Object::create($this->relationClass);
-		}
-		else {
-			$item = DataList::create($this->relationClass)->byID((int) $r->param('ID'));
-		}
-		if($item) {
-			$handler = DashboardHasManyRelationEditorItemRequest::create($this->controller->getDashboard(), $this->controller, $this, $item);
-			return $handler->handleRequest($r, DataModel::inst());
-		}		
-		return $this->httpError(404);
-	}
+    /**
+     * A default controller action that renders the editor
+     *
+     * @param HTTPRequest $r
+     * @return SSViewer
+     */
+    public function index(HTTPRequest $r)
+    {
+        return $this->FieldHolder();
+    }
 
 
+    /**
+     * A controller action that handles the reordering of the list
+     *
+     * @param HTTPRequest $r
+     * @return HTTPResponse
+     * @throws \SilverStripe\ORM\ValidationException
+     */
+    public function sort(HTTPRequest $r)
+    {
+        if ($items = $r->getVar('item')) {
+            foreach ($items as $position => $id) {
+                if ($item = DataList::create($this->relationClass)->byID((int)$id)) {
+                    $item->SortOrder = $position;
+                    $item->write();
+                }
+            }
 
-	
-	/**
-	 * A default controller action that renders the editor
-	 *
-	 * @param SS_HTTPRequest
-	 * @return SSViewer
-	 */
-	public function index(SS_HTTPRequest $r) {
-		return $this->FieldHolder();
-	}
-
-
-
-
-	/** 
-	 * A controller action that handles the reordering of the list
-	 *
-	 * @param SS_HTTPRequest
-	 * @return SS_HTTPResponse
-	 */
-	public function sort(SS_HTTPRequest $r) {
-		if($items = $r->getVar('item')) {
-			foreach($items as $position => $id) {
-				if($item = DataList::create($this->relationClass)->byID((int) $id)) {
-					$item->SortOrder = $position;
-					$item->write();
-				}
-			}
-			return new SS_HTTPResponse("OK");
-		}
-	}
-
+            return new HTTPResponse("OK");
+        }
+    }
 
 
 }

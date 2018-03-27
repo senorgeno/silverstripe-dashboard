@@ -2,24 +2,23 @@
 
 namespace SilverStripeDashboard\Admin;
 
-use LeftAndMain;
-use PermissionProvider;
-use Requirements;
-use SS_HTTPRequest;
-use Member;
-use Object;
-use DataModel;
-use SiteConfig;
-use SS_HTTPResponse;
-use Permission;
-use ArrayList;
-use SS_ClassLoader;
-use Injector;
-use Config;
-use RequestHandler;
-use Form;
-use FieldList;
-use FormAction;
+use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\PermissionProvider;
+use SilverStripe\View\Requirements;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Security\Member;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Security\Permission;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\Core\Manifest\ClassLoader;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Control\RequestHandler;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
 use SilverStripeDashboard\Models\DashboardPanel;
 
 /** 
@@ -126,11 +125,11 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 
 	/** 
 	 * Handles a request for a {@link DashboardPanel} object. Can be a new record or existing
-	 *
-	 * @param SS_HTTPRequest The current request
-	 * @return SS_HTTPResponse
-	 */
-	public function handlePanel(SS_HTTPRequest $r) {
+     *
+     * @param HTTPRequest $r
+     * @throws \SilverStripe\Control\HTTPResponse_Exception
+     */
+	public function handlePanel(HTTPRequest $r) {
 		if($r->param('ID') == "new") {
 			$class = $r->getVar('type');
 			if($class && class_exists($class) && is_subclass_of($class, DashboardPanel::class)) {
@@ -150,23 +149,22 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 		}
 		if($panel && ($panel->canEdit() || $panel->canView())) {
 			$requestClass = $panel->getRequestHandlerClass();
-			$handler = Object::create($requestClass, $this, $panel);				
-			return $handler->handleRequest($r, DataModel::inst());
+			$handler = Injector::inst()->create($requestClass, $this, $panel);
+			return $handler->handleRequest($r, DataObject::create()); // todo ss4 upgrade was set to DataModel...
 
 		}
 		return $this->httpError(404);
 	}
 
 
-
-
-	/**
-	 * A controller action that handles the reordering of the panels
-	 *
-	 * @param SS_HTTPRequest The current request
-	 * @return SS_HTTPResponse
-	 */
-	public function sort(SS_HTTPRequest $r) {
+    /**
+     * A controller action that handles the reordering of the panels
+     *
+     * @param HTTPRequest $r
+     * @return void
+     * @throws \SilverStripe\ORM\ValidationException
+     */
+	public function sort(HTTPRequest $r) {
 		if($sort = $r->requestVar('dashboard-panel')) {
 			foreach($sort as $index => $id) {
 				if($panel = DashboardPanel::get()->byID((int) $id)) {
@@ -180,15 +178,13 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 	}
 
 
-
-
-	/**
-	 * A controller action that handles setting the default dashboard configuration
-	 *
-	 * @param SS_HTTPRequest The current request
-	 * @return SS_HTTPResponse
-	 */
-	public function setdefault(SS_HTTPRequest $r) {
+    /**
+     * A controller action that handles setting the default dashboard configuration
+     *
+     * @param HTTPRequest $r
+     * @return HTTPResponse
+     */
+	public function setdefault(HTTPRequest $r) {
 		foreach(SiteConfig::current_site_config()->DashboardPanels() as $panel) {
 			$panel->delete();
 		}
@@ -198,19 +194,17 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 			$clone->SiteConfigID = SiteConfig::current_site_config()->ID;
 			$clone->write();
 		}
-		return new SS_HTTPResponse(_t('Dashboard.SETASDEFAULTSUCCESS','Success! This dashboard configuration has been set as the default for all new members.'));
+		return new HTTPResponse(_t('Dashboard.SETASDEFAULTSUCCESS','Success! This dashboard configuration has been set as the default for all new members.'));
 	}
 
 
-
-
-	/**
-	 * A controller action that handles the application of a dashboard configuration to all members
-	 *
-	 * @param SS_HTTPRequest The current request
-	 * @return SS_HTTPResponse
-	 */
-	public function applytoall(SS_HTTPRequest $r) {
+    /**
+     * A controller action that handles the application of a dashboard configuration to all members
+     *
+     * @param HTTPResponse $r
+     * @return SS_HTTPResponse
+     */
+	public function applytoall(HTTPResponse $r) {
 		$members = Permission::get_members_by_permission("CMS_ACCESS_Dashboard");
 		foreach($members as $member) {
 			if($member->ID == Member::currentUserID()) continue;
@@ -257,7 +251,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 	 */
 	public function AllPanels() {
 		$set = ArrayList::create(array());
-		$panels = SS_ClassLoader::instance()->getManifest()->getDescendantsOf(DashboardPanel::class);
+		$panels = ClassLoader::inst()->getManifest()->getDescendantsOf(DashboardPanel::class);
 		if($this->config()->excluded_panels) {
 			$panels = array_diff($panels,$this->config()->excluded_panels);
 		}

@@ -2,9 +2,9 @@
 
 namespace SilverStripeDashboard\Extensions;
 
-use Extension;
-use Injector;
-use HiddenField;
+use SilverStripe\Core\Extension;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\HiddenField;
 
 class DashboardItemEditForm extends Extension
 {
