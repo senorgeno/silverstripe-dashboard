@@ -25,6 +25,10 @@ use SilverStripeDashboard\Fields\DashboardButtonOptionsField;
 class DashboardPanel extends DataObject
 {
 
+    /**
+     * @var string
+     */
+    private static $table_name = 'DashboardPanel';
 
     /**
      * @var array

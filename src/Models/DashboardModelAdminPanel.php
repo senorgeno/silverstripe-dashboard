@@ -32,7 +32,14 @@ use SilverStripeDashboard\Control\DashboardPanelRequest;
 class DashboardModelAdminPanel extends DashboardPanel
 {
 
+    /**
+     * @var string
+     */
+    private static $table_name = 'DashboardModelAdminPanel';
 
+    /**
+     * @var array
+     */
     private static $db = array(
         'Count'           => 'Int',
         'ModelAdminClass' => 'Varchar',
@@ -40,11 +47,17 @@ class DashboardModelAdminPanel extends DashboardPanel
     );
 
 
+    /**
+     * @var array
+     */
     private static $defaults = array(
         'Count' => 10
     );
 
 
+    /**
+     * @var bool
+     */
     private static $configure_on_create = true;
 
 
@@ -70,12 +83,18 @@ class DashboardModelAdminPanel extends DashboardPanel
     }
 
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return _t('Dashboard.MODELADMINPANELTITLE', 'Model Admin Editor');
     }
 
 
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return _t('Dashboard.MODELADMINPANELDESCRIPTION', 'Adds a summary view of a Model Admin section of the CMS');

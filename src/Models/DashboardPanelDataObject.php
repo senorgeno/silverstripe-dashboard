@@ -19,6 +19,10 @@ use SilverStripeDashboard\Admin\Dashboard;
 class DashboardPanelDataObject extends DataObject
 {
 
+    /**
+     * @var string
+     */
+    private static $table_name = 'DashboardPanelDataObject';
 
     /**
      * @var array

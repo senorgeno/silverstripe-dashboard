@@ -19,6 +19,11 @@ class DashboardWeatherPanel extends DashboardPanel
 {
 
     /**
+     * @var string
+     */
+    private static $table_name = 'DashboardWeatherPanel';
+    
+    /**
      * @var array
      */
     private static $db = array(
