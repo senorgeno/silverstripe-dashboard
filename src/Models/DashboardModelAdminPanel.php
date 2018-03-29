@@ -294,7 +294,7 @@ class DashboardModelAdminPanel extends DashboardPanel
      */
     public function PanelHolder()
     {
-        Requirements::javascript("dashboard/javascript/dashboard-modeladmin-panel.js");
+        Requirements::javascript("unclecheese/dashboard: client/dist/js/dashboard-modeladmin-panel.js");
 
         return parent::PanelHolder();
     }

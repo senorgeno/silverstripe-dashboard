@@ -162,8 +162,8 @@ class DashboardChart extends ViewableData
      */
     public function forTemplate()
     {
-        Requirements::javascript("dashboard/javascript/thirdparty/google_jsapi_visualization.js");
-        Requirements::javascript("dashboard/javascript/dashboard-chart.js");
+        Requirements::javascript("unclecheese/dashboard: client/dist/js/thirdparty/google_jsapi_visualization.js");
+        Requirements::javascript("unclecheese/dashboard: client/dist/js/dashboard-chart.js");
 
         return $this->renderWith(DashboardChart::class);
     }

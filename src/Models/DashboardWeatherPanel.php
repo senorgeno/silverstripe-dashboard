@@ -142,7 +142,7 @@ class DashboardWeatherPanel extends DashboardPanel
      */
     public function PanelHolder()
     {
-        Requirements::css("dashboard/css/dashboard-weather.css");
+        Requirements::css("unclecheese/dashboard: client/dist/styles/dashboard-weather.css");
 
         return parent::PanelHolder();
     }
