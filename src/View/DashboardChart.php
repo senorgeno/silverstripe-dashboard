@@ -165,7 +165,7 @@ class DashboardChart extends ViewableData
         Requirements::javascript("unclecheese/dashboard: client/dist/js/thirdparty/google_jsapi_visualization.js");
         Requirements::javascript("unclecheese/dashboard: client/dist/js/dashboard-chart.js");
 
-        return $this->renderWith(DashboardChart::class);
+        return $this->renderWith('Includes/DashboardChart');
     }
 
 

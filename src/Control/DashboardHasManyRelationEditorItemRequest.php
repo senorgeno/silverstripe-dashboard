@@ -76,7 +76,7 @@ class DashboardHasManyRelationEditorItemRequest extends RequestHandler
      */
     public function edit(HTTPRequest $r)
     {
-        return $this->renderWith('DashboardHasManyRelationEditorDetailForm');
+        return $this->renderWith('Includes/DashboardHasManyRelationEditorDetailForm');
     }
 
 

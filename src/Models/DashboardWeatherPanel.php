@@ -127,7 +127,7 @@ class DashboardWeatherPanel extends DashboardPanel
                 'Location' => str_replace("Yahoo! Weather - ", "", $label),
                 'Link'     => $link,
                 'Days'     => $days
-            ))->renderWith('DashboardWeatherContent');
+            ))->renderWith('Includes/DashboardWeatherContent');
             $this->WeatherHTML = $html;
             $this->write();
 

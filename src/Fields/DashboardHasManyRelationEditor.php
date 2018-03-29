@@ -65,7 +65,7 @@ class DashboardHasManyRelationEditor extends FormField
     /**
      * @var string The template that renders the editor
      */
-    protected $template = DashboardHasManyRelationEditor::class;
+    protected $template = 'Includes/DashboardHasManyRelationEditor';
 
 
     /**

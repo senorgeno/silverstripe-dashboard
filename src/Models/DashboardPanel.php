@@ -90,7 +90,7 @@ class DashboardPanel extends DataObject
     /**
      * @var string the name of the template used for the wrapper of this panel
      */
-    protected $holderTemplate = DashboardPanel::class;
+    protected $holderTemplate = 'Includes\DashboardPanel';
 
 
     /**
