@@ -23,7 +23,11 @@
         }
     },
     "extra": {
-	    "installer-name": "dashboard"
+	    "installer-name": "dashboard",
+        "expose": [
+            "client/dist",
+            "client/lang"
+        ]
     }
     
 }

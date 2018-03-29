@@ -31,7 +31,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 
 	
 
-	private static $menu_title = Dashboard::class;
+	private static $menu_title = 'Dashboard';
 
 
 	
@@ -47,7 +47,7 @@ class Dashboard extends LeftAndMain implements PermissionProvider {
 
 	
 	
-	private static $menu_icon = "dashboard/images/dashboard.png";
+	private static $menu_icon = "unclecheese/dashboard: images/dashboard.png";
 	
 	
 	
