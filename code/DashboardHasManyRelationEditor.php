@@ -144,7 +144,7 @@ class DashboardHasManyRelationEditor extends FormField {
 	 */
 	public function handleItem(SS_HTTPRequest $r) {
 		if($r->param('ID') == "new") {
-			$item = Object::create($this->relationClass);
+			$item = SS_Object::create($this->relationClass);
 		}
 		else {
 			$item = DataList::create($this->relationClass)->byID((int) $r->param('ID'));
