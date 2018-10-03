@@ -4,7 +4,7 @@ The Dashboard module provides a splash page for the CMS in SilverStripe 3 with c
 
 
 ## Screenshot & Videos
-Images and videos about this module can be found [in this blog post.](http://www.leftandmain.com/silverstripe-screencasts/2012/10/03/dashboard-module-for-silverstripe-3/)
+Images and videos about this module can be found [in this blog post.](https://www.silverstripe.org/blog/the-dashboard-module-make-a-splash-in-silverstripe-3/)
 
 
 ## Included panels
@@ -147,4 +147,22 @@ A gridfield panel uses a similar convention, DashboardGridFieldPanel\_**PageClas
 eg;
 **DashboardGridFieldPanel\_ContactPage\_Submissions.ss**
 
+## Note on Google Analytics Panel
 
+You need to add your Google Analytics config information to the project config.yml:
+```yaml
+DashboardGoogleAnalyticsPanel:
+  email: [XXXXX]@developer.gserviceaccount.com
+  profile: 123456
+  key_file_path: google_oauth.p12  
+```
+To locate your profile ID, visit the Google Analytics website, login and select the website. At the end of the URL will be fragment similar to this:
+```
+#report/visitors-overview/a5559982w55599512p12345678
+/a[6 digits]w[8 digits]p[8 digits]
+```
+The 8 digits that follow the "p" are your profile ID. In the example above, this would be 12345678.
+
+NOTE: To use the Google Analytics panel, you have to enable access for less secure apps in the account permissions section of [https://www.google.com/settings/security](https://www.google.com/settings/security).
+
+For more information about settting up a developer account and obtaining a key file, visit https://github.com/erebusnz/gapi-google-analytics-php-interface#instructions-for-setting-up-a-google-service-account-for-use-with-gapi
