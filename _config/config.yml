@@ -3,8 +3,8 @@ Name: dashboard
 ---
 Member:
   extensions:
-    [DashboardMember]
+    - DashboardMember
 
 GridFieldDetailForm_ItemRequest:
   extensions:
-    [DashboardItemEditForm]
+    - DashboardItemEditForm
